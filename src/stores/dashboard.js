@@ -1,8 +1,12 @@
 import { defineStore } from "pinia";
 import dataService from "@/services/dataService";
+import { useAlertStore } from "@/stores/alert";
 
 export const useDashboardStore = defineStore("dashboard", {
   state: () => ({
+    loading: false,
+    bets: {},
+    allbets: [],
     alertMessage: "",
     alertType: "info",
     showAlert: false,
@@ -10,9 +14,9 @@ export const useDashboardStore = defineStore("dashboard", {
     posts: [],
     totalUsers: [],
     totalPosts: [],
-    recentPosts: []
+    recentPosts: [],
   }),
-  getters: {},
+
   actions: {
     //get total users
     async fetchTotalUsers() {
@@ -55,5 +59,38 @@ export const useDashboardStore = defineStore("dashboard", {
         this.alertType = "danger";
       }
     },
+
+    async getAllPostedBets() {
+      try {
+        this.loading = true;
+        const res = await dataService.getAllBets();
+
+        let code = res.data.code;
+        let message = res.data.message;
+
+        if (code !== 200) {
+          this.bets = {};
+         this.allbets = [];
+          const alertStore = useAlertStore();
+          alertStore.error(message);
+        } else {
+          let total_bets = res.data.total_bets || 0;
+           this.allbets = res.data.createbets || [];
+
+          this.bets = total_bets;
+       
+         
+        }
+      } catch (error) {
+        const alertStore = useAlertStore();
+        alertStore.error(
+          error.response?.data?.message || "Error fetching bets"
+        );
+        this.bets = {};
+      } finally {
+        this.loading = false;
+      }
+    },
   },
+  getters: {},
 });

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia'
 
 defineProps(["isSidebarOpen", "onCloseSidebar"]);
 

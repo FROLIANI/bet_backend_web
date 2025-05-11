@@ -3,13 +3,12 @@ import http from "./httpcommon";
 
 class DataService {
   // USERS ENDPOINTS
-  login = (credentials) => {
-    // Updated endpoint and field
-    return http.post("/superadmin/login", credentials);
+  login = (data) => {
+    return http.post("/superadmin/login", data);
   };
 
-  createUser = (data) => {
-    return http.post("/api/users", data);
+  getAllBets = (data) => {
+    return http.get("/bets/allbets", data);
   };
 
   updateUser = (id, data) => {

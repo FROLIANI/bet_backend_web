@@ -16,20 +16,17 @@ const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
 
-// Forgot Password Placeholder
 const forgotPassword = () => {
   alertMessage.value = "Forgot password functionality is under construction.";
   alertType.value = "info";
   showAlert.value = true;
 };
 
-// Vee-Validate Schema
 const validationSchema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),
   password: yup.string().required("Password is required"),
 });
 
-// Vee-Validate Form and Fields
 const { handleSubmit } = useForm({
   validationSchema,
 });
@@ -37,7 +34,6 @@ const { handleSubmit } = useForm({
 const { value: email, errorMessage: emailError } = useField("email");
 const { value: password, errorMessage: passwordError } = useField("password");
 
-// Handle Form Submission
 const onSubmit = handleSubmit(async (values) => {
   try {
     const response = await dataService.login({
@@ -48,12 +44,14 @@ const onSubmit = handleSubmit(async (values) => {
     console.log("Login response:", response);
 
     let code = response.data.code;
-    console.log("Code:", code);
     let message = response.data.message;
-    console.log("Message:", message);
 
     if (code === 200) {
       const superAdmin = response.data.superAdmin;
+
+     
+      const token = response.data.token;
+      sessionStorage.setItem("authToken", token);
 
       sessionStorage.setItem("auth", "true");
       sessionStorage.setItem(
@@ -63,7 +61,6 @@ const onSubmit = handleSubmit(async (values) => {
           full_name: superAdmin.full_name,
           mobile: superAdmin.phone_number,
           role: superAdmin.role,
-          token: response.data.token,
         })
       );
       router.push("/dashboard");
@@ -73,11 +70,13 @@ const onSubmit = handleSubmit(async (values) => {
       showAlert.value = true;
     }
   } catch (error) {
-    alertMessage.value = error.response?.data?.message ;
+    console.error("Login request failed:", error);
+    alertMessage.value = error.response?.data?.message || "An error occurred. Please try again later.";
     alertType.value = "danger";
     showAlert.value = true;
   }
 });
+
 
 </script>
 

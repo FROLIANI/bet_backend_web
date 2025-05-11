@@ -1,4 +1,5 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { ref, onMounted } from "vue";
 import PieChart from "@/components/PieChart.vue";
 import BarChart from "@/components/BarChart.vue";
@@ -8,7 +9,11 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
-const dashboardStore = useDashboardStore();
+const store = useDashboardStore();
+
+const { allbets,bets } = storeToRefs(store)
+console.log("all",allbets.value)
+
 const stats = ref({
   totalPosts: 120,
   totalComments: 500,
@@ -16,26 +21,6 @@ const stats = ref({
   totalViews: 8500,
 });
 
-// const recentPosts = ref([
-//   {
-//     id: 1,
-//     title: "Vue.js 3: The Future",
-//     author: "John Doe",
-//     date: "2025-02-25",
-//   },
-//   {
-//     id: 2,
-//     title: "Bootstrap vs Tailwind",
-//     author: "Jane Smith",
-//     date: "2025-02-24",
-//   },
-//   {
-//     id: 3,
-//     title: "SEO Best Practices",
-//     author: "Alex Brown",
-//     date: "2025-02-23",
-//   },
-// ]);
 
 const recentComments = ref([
   { id: 1, user: "Mike", post: "Vue.js 3: The Future", date: "2025-02-25" },
@@ -89,10 +74,10 @@ const getTimeAgo = (dateString) => {
 };
 
 onMounted(() => {
-  console.log("Dashboard Loaded");
-  dashboardStore.fetchTotalUsers();
-  dashboardStore.fetchTotalPosts();
-  dashboardStore.fetchRecentPosts();
+  // store.fetchTotalUsers();
+  // store.fetchTotalPosts();
+  // store.fetchRecentPosts();
+   store.getAllPostedBets();
 });
 </script>
 
@@ -109,8 +94,8 @@ onMounted(() => {
             <div class="d-flex align-items-center">
               <i class="bi bi-journals fs-3 me-3"></i>
               <div>
-                <h5>Total Posts</h5>
-                <h2>{{ dashboardStore.totalPosts }}</h2>
+                <h5>Total Posted Bets</h5>
+                <h2>{{bets}}</h2>
               </div>
             </div>
           </div>
@@ -123,7 +108,7 @@ onMounted(() => {
             <div class="d-flex align-items-center">
               <i class="bi bi-chat-left-text fs-3 me-3"></i>
               <div>
-                <h5>Total Comments</h5>
+                <h5>Total Bets</h5>
                 <h2>{{ stats.totalComments }}</h2>
               </div>
             </div>
@@ -137,8 +122,8 @@ onMounted(() => {
             <div class="d-flex align-items-center">
               <i class="bi bi-person fs-3 me-3"></i>
               <div>
-                <h5>Total Users</h5>
-                <h2>{{ dashboardStore.totalUsers }}</h2>
+                <h5>Total Bet Users</h5>
+                <h2>{{ store.totalUsers }}</h2>
               </div>
             </div>
           </div>
@@ -151,7 +136,7 @@ onMounted(() => {
             <div class="d-flex align-items-center">
               <i class="bi bi-eye fs-3 me-3"></i>
               <div>
-                <h5>Total Views</h5>
+                <h5>Amount Gained</h5>
                 <h2>{{ stats.totalViews }}</h2>
               </div>
             </div>
@@ -177,7 +162,7 @@ onMounted(() => {
           <div class="card-header text-primary fw-bold">Recent Posts</div>
           <ul class="list-group list-group-flush">
             <li
-              v-for="post in dashboardStore.recentPosts"
+              v-for="post in store.recentPosts"
               :key="post.id"
               class="list-group-item d-flex justify-content-between"
             >

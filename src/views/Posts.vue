@@ -1,9 +1,16 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { computed, ref, onMounted } from "vue";
 import ReadPost from "./modals/ReadPost.vue";
 import CreatePost from "./modals/CreatePost.vue";
 import Alert from "@/components/Alert.vue";
 import { usePostStore } from "@/stores/post";
+import { useDashboardStore } from "@/stores/dashboard";
+
+const store = useDashboardStore();
+const { allbets } = storeToRefs(store)
+
+console.log("all apaaaaa",allbets)
 
 const postStore = usePostStore();
 const currentPage = ref(1);
@@ -14,63 +21,6 @@ const currentModal = ref(null);
 const searchQuery = ref("");
 const selectedCategory = ref("");
 
-// Hardcoded Posts Data
-// const posts = ref([
-//   {
-//     id: 1,
-//     title: "Vue.js Basics",
-//     author: "John Doe",
-//     category: "Web Dev",
-//     date: "2025-02-28",
-//     content: "Learning Vue.js is fun!",
-//     status: "Published",
-//   },
-//   {
-//     id: 2,
-//     title: "Advanced PHP",
-//     author: "Jane Smith",
-//     category: "Backend",
-//     date: "2025-02-27",
-//     content: "Exploring PHP security best practices.",
-//     status: "Draft",
-//   },
-//   {
-//     id: 3,
-//     title: "CSS Tricks",
-//     author: "Alice Johnson",
-//     category: "Frontend",
-//     date: "2025-02-26",
-//     content: "Making CSS more fun and interactive.",
-//     status: "Published",
-//   },
-//   {
-//     id: 4,
-//     title: "SEO Tips",
-//     author: "Bob Brown",
-//     category: "Marketing",
-//     date: "2025-02-25",
-//     content: "Boost your site ranking with SEO.",
-//     status: "Published",
-//   },
-//   {
-//     id: 5,
-//     title: "Database Optimization",
-//     author: "David Lee",
-//     category: "Database",
-//     date: "2025-02-24",
-//     content: "Indexing and query optimization.",
-//     status: "Draft",
-//   },
-//   {
-//     id: 6,
-//     title: "RESTful APIs",
-//     author: "Charlie Kim",
-//     category: "Backend",
-//     date: "2025-02-23",
-//     content: "Understanding RESTful API design.",
-//     status: "Published",
-//   },
-// ]);
 
 const posts = computed(() => postStore.posts);
 
@@ -139,7 +89,7 @@ const confirmDelete = (id) => {
 };
 
 onMounted(async() => {
-  await postStore.fetchAllPosts();
+ store.getAllPostedBets();
 })
 </script>
 
@@ -154,7 +104,7 @@ onMounted(async() => {
   />
 
   <div class="card p-3 border border-1 border-primary">
-    <h2 class="mb-3">Post Management</h2>
+    <h2 class="mb-3">All Posted Bets</h2>
 
     <div class="row mb-2 g-3">
       <!-- Search, Filter & Add Button -->
@@ -221,7 +171,7 @@ onMounted(async() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(post, index) in paginatedPosts" :key="post.id">
+          <tr v-for="post in paginatedPosts" :key="post.id">
             <td>{{ post.title }}</td>
             <td>{{ post.category }}</td>
             <td>
