@@ -25,7 +25,7 @@ const forgotPassword = () => {
 
 // Vee-Validate Schema
 const validationSchema = yup.object({
-  username: yup.string().required("Username is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
   password: yup.string().required("Password is required"),
 });
 
@@ -34,37 +34,53 @@ const { handleSubmit } = useForm({
   validationSchema,
 });
 
-const { value: username, errorMessage: usernameError } = useField("username");
+const { value: email, errorMessage: emailError } = useField("email");
 const { value: password, errorMessage: passwordError } = useField("password");
 
 // Handle Form Submission
 const onSubmit = handleSubmit(async (values) => {
   try {
     const response = await dataService.login({
-      username: values.username,
+      email: values.email,
       password: values.password,
     });
 
-    if (response.data.success) {
+    console.log("Login response:", response);
+
+    let code = response.data.code;
+    console.log("Code:", code);
+    let message = response.data.message;
+    console.log("Message:", message);
+
+    if (code === 200) {
+      const superAdmin = response.data.superAdmin;
+
       sessionStorage.setItem("auth", "true");
       sessionStorage.setItem(
-        "user",
-        JSON.stringify({ username: values.username, id: response.data.id, firstName: response.data.name })
+        "superAdmin",
+        JSON.stringify({
+          email: superAdmin.email,
+          full_name: superAdmin.full_name,
+          mobile: superAdmin.phone_number,
+          role: superAdmin.role,
+          token: response.data.token,
+        })
       );
-        router.push("/dashboard");
+      router.push("/dashboard");
     } else {
-      alertMessage.value = response.data.error || "Invalid credentials";
+      alertMessage.value = message;
       alertType.value = "danger";
       showAlert.value = true;
     }
   } catch (error) {
-    console.error("Login request failed:", error);
-    alertMessage.value = "An error occurred. Please try again later.";
+    alertMessage.value = error.response?.data?.message ;
     alertType.value = "danger";
     showAlert.value = true;
   }
 });
+
 </script>
+
 
 <template>
   <Alert
@@ -90,25 +106,27 @@ const onSubmit = handleSubmit(async (values) => {
       style="width: 550px; background-color: rgba(240, 240, 240, 0.8)"
     >
       <div class="card-header text-center">
-        <h2 id="logo">The.Blog<span id="mark" class="fw-bold">&trade; Panel</span></h2>
+        <h2 id="logo">
+          The.Blog<span id="mark" class="fw-bold">&trade; Panel</span>
+        </h2>
       </div>
       <div class="card-body fs-5">
         <form @submit.prevent="onSubmit">
-          <!-- Username Field -->
+          <!-- Email Field -->
           <div class="mb-3">
-            <label for="username" class="form-label text-primary">
-              <i class="bi bi-person me-2"></i>Username
+            <label for="email" class="form-label text-primary">
+              <i class="bi bi-envelope me-2"></i>Email
             </label>
             <input
-              type="text"
-              id="username"
-              v-model="username"
+              type="email"
+              id="email"
+              v-model="email"
               class="form-control form-control-lg"
-              :class="{ 'is-invalid': usernameError }"
+              :class="{ 'is-invalid': emailError }"
               style="background-color: rgba(25, 25, 25, 0.3)"
             />
-            <div v-if="usernameError" class="text-danger mt-1">
-              {{ usernameError }}
+            <div v-if="emailError" class="text-danger mt-1">
+              {{ emailError }}
             </div>
           </div>
 
@@ -167,6 +185,7 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .card {

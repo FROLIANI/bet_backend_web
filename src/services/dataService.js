@@ -1,52 +1,46 @@
+// src/services/dataService.js
 import http from "./httpcommon";
 
 class DataService {
-  //SPLASH ENDPOINT
-  getSplash = (params) => {
-    return http.get("mgt/splash/getSplash.php", { params });
-  };
-
-  //USERS ENDPOINTS
+  // USERS ENDPOINTS
   login = (credentials) => {
-    return http.post("mgt/users/login.php", credentials);
+    // Updated endpoint and field
+    return http.post("/superadmin/login", credentials);
   };
 
   createUser = (data) => {
-    return http.post("mgt/users/createUser.php", data);
+    return http.post("/api/users", data);
   };
 
   updateUser = (id, data) => {
-    return http.put(`mgt/users/modifyUser.php?id=${id}`, data);
+    return http.put(`/api/users/${id}`, data);
   };
 
   deleteUser = (id) => {
-    return http.delete(`mgt/users/deleteUser.php`, {
-      data: { id },
-    });
+    return http.delete(`/api/users/${id}`);
   };
 
   // POSTS ENDPOINTS
   writeNewPost = (data) => {
-    return http.post("mgt/posts/newPost.php", data);
+    return http.post("/api/posts", data);
   };
 
   editPost = (id, data) => {
-    return http.put(`mgt/posts/updatePost.php?id=${id}`, data);
+    return http.put(`/api/posts/${id}`, data);
   };
 
   likePost = (data) => {
-    return http.post("portal/likes/addLike.php", data);
-  }
+    return http.post("/api/likes", data);
+  };
 
-  //CATEGORIES ENDPOINTS
+  // CATEGORIES ENDPOINTS
   addNewCategory = (data) => {
-    return http.post("mgt/categories/createCategory.php", data);
-  }
-  
-  modifyCategory = (id, data) => {
-    return http.put(`mgt/categories/editCategory.php?id=${id}`, data);
-  }
+    return http.post("/api/categories", data);
+  };
 
+  modifyCategory = (id, data) => {
+    return http.put(`/api/categories/${id}`, data);
+  };
 }
 
 export default new DataService();
