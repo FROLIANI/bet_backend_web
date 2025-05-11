@@ -14,6 +14,7 @@ const store = useDashboardStore();
 const { allbets,bets } = storeToRefs(store)
 console.log("all",allbets.value)
 
+
 const stats = ref({
   totalPosts: 120,
   totalComments: 500,

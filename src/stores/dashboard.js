@@ -5,7 +5,7 @@ import { useAlertStore } from "@/stores/alert";
 export const useDashboardStore = defineStore("dashboard", {
   state: () => ({
     loading: false,
-    bets: {},
+    bets: 0,
     allbets: [],
     alertMessage: "",
     alertType: "info",
@@ -76,6 +76,7 @@ export const useDashboardStore = defineStore("dashboard", {
         } else {
           let total_bets = res.data.total_bets || 0;
            this.allbets = res.data.createbets || [];
+         
 
           this.bets = total_bets;
        
@@ -91,6 +92,16 @@ export const useDashboardStore = defineStore("dashboard", {
         this.loading = false;
       }
     },
+
+    persist: {
+    enabled: true,
+    strategies: [
+      {
+        key: "dashboardStore",       
+        storage: localStorage,       
+      },
+    ],
+  },
   },
   getters: {},
 });
