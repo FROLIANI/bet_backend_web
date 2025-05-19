@@ -11,9 +11,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 const store = useDashboardStore();
 
-const { allbets,bets } = storeToRefs(store)
-console.log("all",allbets.value)
-
+const { bet_info,total_placed,tota_users } = storeToRefs(store)
 
 const stats = ref({
   totalPosts: 120,
@@ -76,8 +74,8 @@ const getTimeAgo = (dateString) => {
 
 onMounted(() => {
   // store.fetchTotalUsers();
-  // store.fetchTotalPosts();
-  // store.fetchRecentPosts();
+  store.getUsers();
+  store.getPlacedBets();
    store.getAllPostedBets();
 });
 </script>
@@ -95,8 +93,8 @@ onMounted(() => {
             <div class="d-flex align-items-center">
               <i class="bi bi-journals fs-3 me-3"></i>
               <div>
-                <h5>Total Posted Bets</h5>
-                <h2>{{bets}}</h2>
+                <h5>Posted Bets</h5>
+                <h2>{{bet_info.total_bets}}</h2>
               </div>
             </div>
           </div>
@@ -110,7 +108,7 @@ onMounted(() => {
               <i class="bi bi-chat-left-text fs-3 me-3"></i>
               <div>
                 <h5>Total Bets</h5>
-                <h2>{{ stats.totalComments }}</h2>
+                <h2>{{ total_placed }}</h2>
               </div>
             </div>
           </div>
@@ -123,8 +121,8 @@ onMounted(() => {
             <div class="d-flex align-items-center">
               <i class="bi bi-person fs-3 me-3"></i>
               <div>
-                <h5>Total Bet Users</h5>
-                <h2>{{ store.totalUsers }}</h2>
+                <h5>Bet Users</h5>
+                <h2>{{ tota_users }}</h2>
               </div>
             </div>
           </div>

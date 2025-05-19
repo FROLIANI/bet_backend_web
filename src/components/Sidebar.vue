@@ -35,7 +35,7 @@ onMounted(() => {
     </button>
 
     <ul class="nav flex-column mt-3">
-      <li class="nav-item fs-3 ms-4 mb-3 fw-bold" id="logo">The.Blog<span id="mark" class="fw-bold">&trade; Panel</span></li>
+      <li class="nav-item fs-3 ms-4 mb-3 fw-bold" id="logo">The.Bet<span id="mark" class="fw-bold">&trade; Panel</span></li>
       <li class="nav-item">
         <router-link class="nav-link text-white" to="/dashboard">
           <i class="bi bi-graph-up-arrow me-2"></i> Dashboard

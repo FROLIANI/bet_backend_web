@@ -106,7 +106,7 @@ const onSubmit = handleSubmit(async (values) => {
     >
       <div class="card-header text-center">
         <h2 id="logo">
-          The.Blog<span id="mark" class="fw-bold">&trade; Panel</span>
+          The.Bet<span id="mark" class="fw-bold">&trade; Panel</span>
         </h2>
       </div>
       <div class="card-body fs-5">

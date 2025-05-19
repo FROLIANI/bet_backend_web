@@ -42,7 +42,7 @@ onUnmounted(() => {
     <!-- Footer -->
     <footer class="footer py-3 text-center">
       <div class="container">
-        <span class="text-muted">&copy; 2025 The.Blog Panel. All rights reserved.</span>
+        <span class="text-muted">&copy; 2025 The.Bet Panel. All rights reserved.</span>
       </div>
     </footer>
   </div>

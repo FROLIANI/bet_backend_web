@@ -5,8 +5,13 @@ import { useAlertStore } from "@/stores/alert";
 export const useDashboardStore = defineStore("dashboard", {
   state: () => ({
     loading: false,
-    bets: 0,
-    allbets: [],
+    bet_info: [],
+    total_placed: 0,
+    total_bet_info:{},
+
+    tota_users:0,
+    users:{},
+
     alertMessage: "",
     alertType: "info",
     showAlert: false,
@@ -60,6 +65,7 @@ export const useDashboardStore = defineStore("dashboard", {
       }
     },
 
+    //Total + all posted bets
     async getAllPostedBets() {
       try {
         this.loading = true;
@@ -68,40 +74,87 @@ export const useDashboardStore = defineStore("dashboard", {
         let code = res.data.code;
         let message = res.data.message;
 
-        if (code !== 200) {
-          this.bets = {};
-         this.allbets = [];
-          const alertStore = useAlertStore();
-          alertStore.error(message);
-        } else {
-          let total_bets = res.data.total_bets || 0;
-           this.allbets = res.data.createbets || [];
-         
+        let bet_datails = res.data.bet_data;
 
-          this.bets = total_bets;
-       
-         
+        if (code !== 200) {
+          // const alertStore = useAlertStore();
+          // alertStore.error(message);
+          this.bet_info = [];
+        } else {
+          this.bet_info = bet_datails;
         }
       } catch (error) {
         const alertStore = useAlertStore();
         alertStore.error(
           error.response?.data?.message || "Error fetching bets"
         );
-        this.bets = {};
+        this.bet_info = {};
       } finally {
         this.loading = false;
       }
     },
 
+    //Total + all placed bets
+   async getPlacedBets() {
+  try {
+    this.loading = true;
+    const res = await dataService.getAllPlacedBets();
+
+    let code = res.data.code;
+    let message = res.data.message;
+    if (code !== 200) {
+      this.total_placed = 0;
+    } else {
+      this.total_placed = res.data.total;
+      this.total_bet_info = res.data.data;
+    }
+  } catch (error) {
+    const alertStore = useAlertStore();
+    alertStore.error(
+      error.response?.data?.message || "Error fetching placed bets"
+    );
+    this.bet_info = [];
+  } finally {
+    this.loading = false;
+  }
+},
+
+    //Total + users
+   async getUsers() {
+  try {
+    this.loading = true;
+    const res = await dataService.getAllUsers();
+
+    let code = res.data.code;
+    let message = res.data.message;
+
+    if (code !== 200) {
+      this.total_placed = 0;
+    } else {
+      this.tota_users = res.data.total_users;
+      this.users = res.data.users;
+    }
+  } catch (error) {
+    const alertStore = useAlertStore();
+    alertStore.error(
+      error.response?.data?.message || "Error fetching placed bets"
+    );
+    this.bet_info = [];
+  } finally {
+    this.loading = false;
+  }
+},
+
+
     persist: {
-    enabled: true,
-    strategies: [
-      {
-        key: "dashboardStore",       
-        storage: localStorage,       
-      },
-    ],
-  },
+      enabled: true,
+      strategies: [
+        {
+          key: "dashboardStore",
+          storage: localStorage,
+        },
+      ],
+    },
   },
   getters: {},
 });

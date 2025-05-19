@@ -11,6 +11,14 @@ class DataService {
     return http.get("/bets/allbets", data);
   };
 
+   getAllPlacedBets = (data) => {
+    return http.get("/bets/all-placed-bets", data);
+  };
+
+   getAllUsers = (data) => {
+    return http.get("/superadmin/users", data);
+  };
+
   updateUser = (id, data) => {
     return http.put(`/api/users/${id}`, data);
   };

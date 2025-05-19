@@ -21,7 +21,7 @@ app.use(pinia)
 app.use(router)
 
 router.afterEach((to) => {
-    document.title = `Blog Panel: ${to.meta.title || 'Login'}`;
+    document.title = `Bet Panel: ${to.meta.title || 'Login'}`;
 });
 
 app.mount('#app')
