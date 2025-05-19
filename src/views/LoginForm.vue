@@ -95,7 +95,7 @@ const onSubmit = handleSubmit(async (values) => {
           rgba(0, 0, 0, 0.7),
           rgba(35, 110, 230, 0.7)
         ),
-        url('/images/news-bg.jpg');
+        url('/images/bet.png');
       background-size: cover;
       background-position: center;
     "
@@ -174,10 +174,10 @@ const onSubmit = handleSubmit(async (values) => {
         <p class="text-center text-primary mt-4 fs-6 fw-bold">
           Powered by: <br />
           <img
-            src="/images/rahisi.png?url"
+            src="/images/bet.png"
             alt="Company Logo"
             class="img-fluid"
-            style="height: 27px"
+           style="height: 27px; border-radius: 5px;"
           />
         </p>
       </div>
