@@ -10,6 +10,8 @@ const userStore = useUserStore();
 const router = useRouter();
 const showModal = ref(false);
 
+const fullName = ref("");
+
 const openChangePinModal = () => {
   showModal.value = true;
 };
@@ -29,7 +31,15 @@ const closeModal = () => {
 };
 
 onMounted(() => {
-  userStore.fetchLoggedInUserDetails();
+  const superAdminData = sessionStorage.getItem("superAdmin");
+  if (superAdminData) {
+    try {
+      const parsedData = JSON.parse(superAdminData);
+      fullName.value = parsedData.full_name || "";
+    } catch (error) {
+      console.error("Invalid", error);
+    }
+  }
 });
 </script>
 
@@ -63,7 +73,8 @@ onMounted(() => {
           aria-expanded="false"
         >
           <span class="ext-capitalize fs-5">
-            <i class="bi bi-person-circle me-2"></i>{{ userStore.username }}
+            <i class="bi bi-person-circle me-2"></i>
+            {{ fullName }}
           </span>
         </div>
         <ul class="dropdown-menu dropdown-menu-end bg-primary shadow">
