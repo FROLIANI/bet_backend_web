@@ -22,9 +22,9 @@ const stats = ref({
 
 
 const recentComments = ref([
-  { id: 1, user: "Mike", post: "Vue.js 3: The Future", date: "2025-02-25" },
-  { id: 2, user: "Emily", post: "Bootstrap vs Tailwind", date: "2025-02-24" },
-  { id: 3, user: "David", post: "SEO Best Practices", date: "2025-02-23" },
+  { id: 1, user: "Mike", post: "This is real,yesterday i won", date: "2025-02-25" },
+  { id: 2, user: "Emily", post: "Money is here in deed", date: "2025-02-24" },
+  { id: 3, user: "David", post: "Let get smoneyplay more..", date: "2025-02-23" },
 ]);
 
 const chartData = ref({
