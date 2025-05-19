@@ -7,6 +7,8 @@ import Categories from '@/views/Categories.vue'
 import Users from '@/views/Users.vue'
 import PublishedPost from '@/views/PublishedPost.vue'
 import DraftedPost from '@/views/DraftedPost.vue'
+import PostPonedPost from '@/views/PostPonedPost.vue'
+import SuspendedPost from '@/views/SuspendedPost.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -36,9 +38,21 @@ const router = createRouter({
           meta: { title: 'Published' }
         },
         {
-          path: '/drafted',
+          path: '/closed',
           component: DraftedPost,
           meta: { title: 'Drafted' }
+        },
+
+          {
+          path: '/postPonedPost',
+          component: PostPonedPost,
+          meta: { title: 'PostPonedPost' }
+        },
+
+         {
+          path: '/suspendedPost',
+          component: SuspendedPost,
+          meta: { title: 'SuspendedPost' }
         },
         {
           path: '/categories',

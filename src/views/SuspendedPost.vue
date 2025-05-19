@@ -141,7 +141,10 @@ const filteredBets = computed(() => {
   return filtered;
 });
 
-
+//Only open bets
+const postponedBets = computed(() => {
+  return all_bets.value.filter((bet) => bet.status === "postponed");
+});
 
 </script>
 
@@ -224,7 +227,7 @@ const filteredBets = computed(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(bet, index) in all_bets" :key="index">
+          <tr v-for="(bet, index) in postponedBets" :key="index">
             <td>{{ bet.bet_id }}</td>
             <td>{{ bet.title }}</td>
             <td>
@@ -260,7 +263,7 @@ const filteredBets = computed(() => {
               </div>
             </td>
           </tr>
-          <tr v-if="all_bets.length === 0">
+          <tr v-if="postponedBets.length === 0">
             <td colspan="5" class="text-center">
               <i class="bi bi-exclamation-circle me-2"></i>
               No post(s) available

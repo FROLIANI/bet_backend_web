@@ -50,7 +50,7 @@ onMounted(() => {
           href="#"
           @click.prevent="toggleDropdown('posts')"
         >
-          <span> <i class="bi bi-journals me-2"></i> Posts </span>
+          <span> <i class="bi bi-journals me-2"></i>Bet Posts </span>
           <i
             class="bi"
             :class="
@@ -66,24 +66,24 @@ onMounted(() => {
           </li>
           <li>
             <router-link class="nav-link text-white" to="/published">
-             Open
+             Open Bets
             </router-link>
           </li>
           <li>
-            <router-link class="nav-link text-white" to="/drafted">
-             Closed
+            <router-link class="nav-link text-white" to="/closed">
+             Closed Bets
             </router-link>
           </li>
 
           <li>
-            <router-link class="nav-link text-white" to="/drafted">
-             Postponed
+            <router-link class="nav-link text-white" to="/postPonedPost">
+             Postponed Bets
             </router-link>
           </li>
 
            <li>
-            <router-link class="nav-link text-white" to="/drafted">
-             Suspended
+            <router-link class="nav-link text-white" to="/suspendedPost">
+             Suspended Bets
             </router-link>
           </li>
         </ul>
