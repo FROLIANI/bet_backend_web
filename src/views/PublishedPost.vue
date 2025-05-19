@@ -155,7 +155,7 @@ onMounted(async() => {
   />
 
   <div class="card p-3 border border-1 border-primary">
-    <h2 class="mb-3">Published Post</h2>
+    <h2 class="mb-3">Open Bets Post</h2>
 
     <div class="row mb-2 g-3">
       <!-- Search, Filter & Add Button -->
