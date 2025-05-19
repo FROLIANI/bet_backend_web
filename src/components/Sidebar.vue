@@ -66,12 +66,24 @@ onMounted(() => {
           </li>
           <li>
             <router-link class="nav-link text-white" to="/published">
-              Published
+             Open
             </router-link>
           </li>
           <li>
             <router-link class="nav-link text-white" to="/drafted">
-              Drafts
+             Closed
+            </router-link>
+          </li>
+
+          <li>
+            <router-link class="nav-link text-white" to="/drafted">
+             Postponed
+            </router-link>
+          </li>
+
+           <li>
+            <router-link class="nav-link text-white" to="/drafted">
+             Suspended
             </router-link>
           </li>
         </ul>
@@ -85,7 +97,7 @@ onMounted(() => {
           href="#"
           @click.prevent="toggleDropdown('categories')"
         >
-          <span> <i class="bi bi-columns-gap me-2"></i> Categories </span>
+          <span> <i class="bi bi-columns-gap me-2"></i> Bets </span>
           <i
             class="bi"
             :class="
@@ -96,19 +108,25 @@ onMounted(() => {
         <ul v-if="activeDropdown === 'categories'" class="nav flex-column bg-secondary ms-3">
           <li>
             <router-link class="nav-link text-white" to="/categories">
-              All Categories
+              All bets
             </router-link>
           </li>
           <li>
             <router-link class="nav-link text-white" to="/categories">
-              Active
+              won
             </router-link>
           </li>
           <li>
             <router-link class="nav-link text-white" to="/categories">
-              Inactive
+             lost
             </router-link>
-          </li>        
+          </li>  
+          
+           <li>
+            <router-link class="nav-link text-white" to="/categories">
+             Draw
+            </router-link>
+          </li> 
         </ul>
       </li>
 

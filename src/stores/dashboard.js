@@ -82,6 +82,7 @@ export const useDashboardStore = defineStore("dashboard", {
           this.bet_info = [];
         } else {
           this.bet_info = bet_datails;
+          sessionStorage.setItem("bet_info", JSON.stringify(bet_datails));
         }
       } catch (error) {
         const alertStore = useAlertStore();
@@ -151,7 +152,7 @@ export const useDashboardStore = defineStore("dashboard", {
       strategies: [
         {
           key: "dashboardStore",
-          storage: localStorage,
+          storage: sessionStorage ,
         },
       ],
     },

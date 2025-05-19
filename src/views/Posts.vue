@@ -1,5 +1,5 @@
 <script setup>
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 import { computed, ref, onMounted } from "vue";
 import ReadPost from "./modals/ReadPost.vue";
 import CreatePost from "./modals/CreatePost.vue";
@@ -8,9 +8,7 @@ import { usePostStore } from "@/stores/post";
 import { useDashboardStore } from "@/stores/dashboard";
 
 const store = useDashboardStore();
-const { allbets } = storeToRefs(store)
-
-console.log("all apaaaaa",allbets)
+// const { bet_ } = storeToRefs(store)
 
 const postStore = usePostStore();
 const currentPage = ref(1);
@@ -21,27 +19,30 @@ const currentModal = ref(null);
 const searchQuery = ref("");
 const selectedCategory = ref("");
 
-
 const posts = computed(() => postStore.posts);
 
 const categories = computed(() => [
   ...new Set(posts.value.map((post) => post.category)),
 ]);
 
-const totalPages = computed(() => Math.ceil(filteredPosts.value.length / itemsPerPage));
+const totalPages = computed(() =>
+  Math.ceil(filteredPosts.value.length / itemsPerPage)
+);
 
 const filteredPosts = computed(() => {
   let filtered = posts.value;
 
   if (searchQuery.value) {
-    filtered = filtered.filter((post) => 
+    filtered = filtered.filter((post) =>
       post.title.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
   }
 
   // Category filter
   if (selectedCategory.value) {
-    filtered = filtered.filter((post) => post.category === selectedCategory.value);
+    filtered = filtered.filter(
+      (post) => post.category === selectedCategory.value
+    );
   }
 
   return filtered;
@@ -88,15 +89,66 @@ const confirmDelete = (id) => {
   }
 };
 
-onMounted(async() => {
- store.getAllPostedBets();
-})
+const all_bets = ref([]);
+
+onMounted(() => {
+  const betsData = sessionStorage.getItem("bet_info");
+  if (betsData) {
+    try {
+      const parsedData = JSON.parse(betsData);
+      all_bets.value = parsedData.createbets || [];
+      console.log("Fetched createbets:", all_bets.value);
+    } catch (error) {
+      console.error("Invalid", error);
+    }
+  }
+});
+
+console.log("here", all_bets.value);
+
+const formatDateTime = (dateString) => {
+  if (!dateString) return "-";
+
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // months are 0-indexed
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "pm" : "am";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // 0 => 12
+
+  return `${day}-${month}-${year} ${hours}:${minutes} ${ampm}`;
+};
+
+const filteredBets = computed(() => {
+  let filtered = all_bets.value;
+
+  if (searchQuery.value) {
+    filtered = filtered.filter((bet) =>
+      bet.title?.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+  }
+
+  if (selectedCategory.value) {
+    filtered = filtered.filter(
+      (bet) => bet.category === selectedCategory.value
+    );
+  }
+
+  return filtered;
+});
+
+
+
 </script>
 
 
 <template>
-
-<Alert
+  <Alert
     :message="postStore.alertMessage"
     :type="postStore.alertType"
     :show="postStore.showAlert"
@@ -137,7 +189,7 @@ onMounted(async() => {
                 @change="filterPosts"
                 aria-label="Filter by Category"
               >
-                <option value="">All Categories</option>
+                <option value="">All bets</option>
                 <option
                   v-for="category in categories"
                   :key="category"
@@ -163,25 +215,29 @@ onMounted(async() => {
       <table class="table table-striped table-hover">
         <thead class="table-primary">
           <tr class="fw-bold">
-            <th class="fw-bold">Title</th>
-            <th class="fw-bold">Category</th>
+            <th class="fw-bold">Bet ID</th>
+            <th class="fw-bold">Game Type</th>
             <th class="fw-bold">Status</th>
-            <th class="fw-bold">Date</th>
+            <th class="fw-bold">Created at</th>
+            <th class="fw-bold">Closed at</th>
+            <th class="fw-bold">Stake</th>
             <th class="fw-bold">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="post in paginatedPosts" :key="post.id">
-            <td>{{ post.title }}</td>
-            <td>{{ post.category }}</td>
+          <tr v-for="(bet, index) in all_bets" :key="index">
+            <td>{{ bet.bet_id }}</td>
+            <td>{{ bet.title }}</td>
             <td>
-              <span
-                class="badge"
-                :class="post.post_status_name === 'Published' ? 'bg-success' : 'bg-info'"
-                >{{ post.post_status_name }}</span
-              >
+              <span class="badge bg-success">{{ bet.status }}</span>
             </td>
-            <td>{{ post.created_at }}</td>
+
+            <td>{{ formatDateTime(bet.created_at) }}</td>
+            <td>{{ formatDateTime(bet.closed_at) }}</td>
+
+            <td>
+              <span class="badge bg-primary">{{ bet.total_stake }}</span>
+            </td>
             <td>
               <div class="btn-group">
                 <button
@@ -205,9 +261,10 @@ onMounted(async() => {
               </div>
             </td>
           </tr>
-          <tr v-if="paginatedPosts.length === 0">
+          <tr v-if="all_bets.length === 0">
             <td colspan="5" class="text-center">
-              <i class="bi bi-exclamation-circle me-2"></i> No post(s) available
+              <i class="bi bi-exclamation-circle me-2"></i>
+              No post(s) available
             </td>
           </tr>
         </tbody>
@@ -215,7 +272,10 @@ onMounted(async() => {
     </div>
 
     <!-- Pagination -->
-    <div v-if="paginatedPosts.length > 0" class="d-flex justify-content-between align-items-center mt-3">
+    <div
+      v-if="paginatedPosts.length > 0"
+      class="d-flex justify-content-between align-items-center mt-3"
+    >
       <button
         class="btn btn-primary"
         :disabled="currentPage === 1"
