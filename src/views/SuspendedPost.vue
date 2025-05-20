@@ -143,7 +143,7 @@ const filteredBets = computed(() => {
 
 //Only open bets
 const postponedBets = computed(() => {
-  return all_bets.value.filter((bet) => bet.status === "postponed");
+  return all_bets.value.filter((bet) => bet.status === "suspended");
 });
 
 </script>
@@ -158,7 +158,7 @@ const postponedBets = computed(() => {
   />
 
   <div class="card p-3 border border-1 border-primary">
-    <h2 class="mb-3">All Posted Bets</h2>
+    <h2 class="mb-3">All Suspended Bets</h2>
 
     <div class="row mb-2 g-3">
       <!-- Search, Filter & Add Button -->

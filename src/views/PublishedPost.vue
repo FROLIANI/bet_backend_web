@@ -158,7 +158,7 @@ const openBets = computed(() => {
   />
 
   <div class="card p-3 border border-1 border-primary">
-    <h2 class="mb-3">All Posted Bets</h2>
+    <h2 class="mb-3">All Open Bets</h2>
 
     <div class="row mb-2 g-3">
       <!-- Search, Filter & Add Button -->
